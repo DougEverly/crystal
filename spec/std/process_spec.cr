@@ -168,4 +168,10 @@ describe Process do
     end
     buffer.to_s.lines.size.should eq(1000)
   end
+	
+	it "sets program name" do
+		name = "MyProgramName"
+		Process.name = name
+		Process.name.should eq(name)
+	end
 end

@@ -8,6 +8,13 @@ lib LibC
   fun getpid : PidT
   fun getppid : PidT
   fun exit(status : Int) : NoReturn
+	
+  ifdef darwin
+		fun getprogname : UInt8*
+		fun setprogname(name : UInt8*)
+  elsif linux
+  end
+	
 
   ifdef x86_64
     alias ClockT = UInt64
@@ -112,6 +119,25 @@ class Process
     LibC.times(out tms)
     Tms.new(tms.utime / hertz, tms.stime / hertz, tms.cutime / hertz, tms.cstime / hertz)
   end
+	
+  ifdef darwin
+		def self.name=(name : String)
+			LibC.setprogname(name)
+		end
+
+		def self.name : String
+			String.new(LibC.getprogname)
+		end
+
+  elsif linux
+		def self.name=(name : String)
+		end
+
+		def self.name
+			return ""
+		end
+  end
+	
 end
 
 def fork
