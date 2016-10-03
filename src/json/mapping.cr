@@ -75,6 +75,51 @@ module JSON
       end
     {% end %}
 
+    def initialize(%any : JSON::Any)
+      {% for key, value in properties %}
+        %var{key.id} = nil
+        %found{key.id} = true
+      {% end %}
+
+        {% for key, value in properties %}
+            %found{key.id} = true
+
+            %var{key.id} = %any["{{key.id}}"]
+        {% end %}
+
+      {% for key, value in properties %}
+        {% if value[:nilable] %}
+          {% if value[:default] != nil %}
+            @{{key.id}} = %found{key.id} ? %var{key.id} : {{value[:default]}}
+          {% else %}
+
+          {% if value[:type].stringify == "Int32" %}
+            @{{key.id}} = (%var{key.id}).as_i?
+          {% elsif value[:type].stringify == "Int64" %}
+            @{{key.id}} = (%var{key.id}).as_i64?
+          {% elsif value[:type].stringify == "String" %}
+            @{{key.id}} = (%var{key.id}).as_s?
+          {% else %}
+            "oops"
+          {% end %}
+        {% end %}
+        {% elsif value[:default] != nil %}
+          @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : %var{key.id}
+        {% elsif value[:type].stringify == "Int32" %}
+          @{{key.id}} = (%var{key.id}).as_i
+        {% elsif value[:type].stringify == "Int64" %}
+          @{{key.id}} = (%var{key.id}).as_i64
+        {% elsif value[:type].stringify == "String" %}
+          @{{key.id}} = (%var{key.id}).as_s
+        {% else %}
+          "oops"
+        {% end %}
+      {% end %}
+
+      {% debug() %}
+    end
+
+
     def initialize(%pull : JSON::PullParser)
       {% for key, value in properties %}
         %var{key.id} = nil

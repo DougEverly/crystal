@@ -8,6 +8,10 @@
 # Int32.from_json("1")                # => 1
 # Array(Int32).from_json("[1, 2, 3]") # => [1, 2, 3]
 # ```
+def Object.from_json(any : JSON::Any) : self
+  new(any)
+end
+
 def Object.from_json(string_or_io) : self
   parser = JSON::PullParser.new(string_or_io)
   new parser
