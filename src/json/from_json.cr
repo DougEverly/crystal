@@ -102,6 +102,10 @@ def String.new(pull : JSON::PullParser)
   pull.read_string
 end
 
+def String.new(any : JSON::Any)
+  new(any)
+end
+
 def Array.new(pull : JSON::PullParser)
   ary = new
   new(pull) do |element|
