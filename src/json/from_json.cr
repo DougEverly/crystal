@@ -114,9 +114,23 @@ def Array.new(pull : JSON::PullParser)
   ary
 end
 
+def Array.new(any : JSON::Any)
+  ary = new
+  new(any) do |element|
+    ary << element
+  end
+  ary
+end
+
 def Array.new(pull : JSON::PullParser)
   pull.read_array do
     yield T.new(pull)
+  end
+end
+
+def Array.new(any : JSON::Any)
+  any.as_a.each do |element|
+    yield T.new(JSON::Any.new(element))
   end
 end
 

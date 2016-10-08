@@ -75,7 +75,7 @@ module JSON
       end
     {% end %}
 
-    def initialize(%any : JSON::Any)
+    def initialize(%any : JSON::Any | Hash(String, JSON::Any))
       {% for key, value in properties %}
         %var{key.id} = nil
         %found{key.id} = false
