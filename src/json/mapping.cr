@@ -75,11 +75,27 @@ module JSON
       end
     {% end %}
 
-    def initialize(%any : JSON::Any | Hash(String, JSON::Any))
+    def initialize(%any : JSON::Any)
       {% for key, value in properties %}
         %var{key.id} = nil
         %found{key.id} = false
       {% end %}
+
+      %any.as_h.each do |key, value|
+        case key
+        {% for key, value in properties %}
+          when {{value[:key] || key.id.stringify}}
+            # nothing
+        {% end %}
+        else
+        {% if strict %}
+          raise JSON::ParseException.new("unknown json attribute: #{key}", 0, 0)
+        {% else %}
+          # nothing
+        {% end %}
+        end
+      end
+
 
 
       {% for key, value in properties %}

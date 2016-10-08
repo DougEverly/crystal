@@ -13,12 +13,12 @@ private class JSONPerson
   end
 end
 
-# private class StrictJSONPerson
-#   JSON.mapping({
-#     name: {type: String},
-#     age:  {type: Int32, nilable: true},
-#   }, true)
-# end
+private class StrictJSONPerson
+  JSON.mapping({
+    name: {type: String},
+    age:  {type: Int32, nilable: true},
+  }, true)
+end
 
 # private class JSONPersonEmittingNull
 #   JSON.mapping({
@@ -197,18 +197,40 @@ describe "JSON mapping" do
       person2.should eq(person)
     end
 
-  #   it "parses person with unknown attributes" do
-  #     person = JSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
-  #     person.should be_a(JSONPerson)
-  #     person.name.should eq("John")
-  #     person.age.should eq(30)
-  #   end
+    it "does to_json (JSON::Any)" do
+      j = JSON.parse(%({"name": "John", "age": 30}))
+      person = JSONPerson.from_json(j)
+      person2 = JSONPerson.from_json(person.to_json)
+      person2.should eq(person)
+    end
 
-  #   it "parses strict person with unknown attributes" do
-  #     expect_raises JSON::ParseException, "unknown json attribute: foo" do
-  #       StrictJSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
-  #     end
-  #   end
+    it "parses person with unknown attributes" do
+      person = JSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
+      person.should be_a(JSONPerson)
+      person.name.should eq("John")
+      person.age.should eq(30)
+    end
+
+    it "parses person with unknown attributes (JSON::Any)" do
+      j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
+      person = JSONPerson.from_json(j)
+      person.should be_a(JSONPerson)
+      person.name.should eq("John")
+      person.age.should eq(30)
+    end
+
+    it "parses strict person with unknown attributes" do
+      expect_raises JSON::ParseException, "unknown json attribute: foo" do
+        StrictJSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
+      end
+    end
+
+    it "parses strict person with unknown attributes (JSON::Any)" do
+      j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
+      expect_raises JSON::ParseException, "unknown json attribute: foo" do
+        StrictJSONPerson.from_json(j)
+      end
+    end
 
   #   it "raises if non-nilable attribute is nil" do
   #     expect_raises JSON::ParseException, "missing json attribute: name" do
