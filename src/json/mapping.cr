@@ -81,11 +81,16 @@ module JSON
         %found{key.id} = false
       {% end %}
 
-      %any.as_h.each do |key, value|
+      %any.as_h.each do |key, val|
         case key
         {% for key, value in properties %}
           when {{value[:key] || key.id.stringify}}
-            # nothing
+              %var{key.id} = begin
+                {% if value[:converter] %}
+                  {{value[:converter]}}.from_json(val)
+                {% end %}
+              end
+
         {% end %}
         else
         {% if strict %}
@@ -120,8 +125,19 @@ module JSON
 
           {% if value[:type].stringify == "String" %}
             @{{key.id}} = %any["{{key.id}}"].as_s
+          {% elsif value[:type].stringify == "Int8" %}
+            @{{key.id}} = %any["{{key.id}}"].as_i64.to_i8
+          {% elsif value[:type].stringify == "Int16" %}
+            @{{key.id}} = %any["{{key.id}}"].as_i64.to_i16
+          {% elsif value[:type].stringify == "Int32" %}
+            @{{key.id}} = %any["{{key.id}}"].as_i64.to_i32
           {% elsif value[:type].stringify == "Bool" %}
             @{{key.id}} = %any["{{key.id}}"].as_bool
+          {% else %}
+            # io = IO.new
+            #  %any["{{key.id}}"].to_json(io)
+            @{{key.id}} =  {{value[:type]}}.new(%any["{{key.id}}"])
+            # raise JSON::ParseException.new("unknown json type: UNKNOWN", 0, 0)
           {% end %}
 
         {% end %}

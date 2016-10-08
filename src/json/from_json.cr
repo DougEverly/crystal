@@ -76,6 +76,12 @@ end
   end
 {% end %}
 
+{% for type in %w(Int8 Int16 Int32 Int64 UInt8 UInt16 UInt32 UInt64) %}
+  def {{type.id}}.new(any : JSON::Any)
+    {{type.id}}.new(any.as_i64)
+  end
+{% end %}
+
 def Float32.new(pull : JSON::PullParser)
   case pull.kind
   when :int
@@ -140,6 +146,10 @@ def Set.new(pull : JSON::PullParser)
     set << T.new(pull)
   end
   set
+end
+
+def Set.new(any : JSON::Any)
+  set = new
 end
 
 def Hash.new(pull : JSON::PullParser)
