@@ -191,11 +191,11 @@ describe "JSON mapping" do
       people.size.should eq(2)
     end
 
-  #   it "does to_json" do
-  #     person = JSONPerson.from_json(%({"name": "John", "age": 30}))
-  #     person2 = JSONPerson.from_json(person.to_json)
-  #     person2.should eq(person)
-  #   end
+    it "does to_json" do
+      person = JSONPerson.from_json(%({"name": "John", "age": 30}))
+      person2 = JSONPerson.from_json(person.to_json)
+      person2.should eq(person)
+    end
 
   #   it "parses person with unknown attributes" do
   #     person = JSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
