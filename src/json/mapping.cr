@@ -109,18 +109,26 @@ module JSON
         {% end %}
       {% end %}
 
-
       {% for key, value in properties %}
         "{{ key.id }}"
         "{{ value[:type] }}"
         "{{ value[:nilable] }}"
 
         {% if value[:nilable] %}
-          @{{key.id}} = %any["{{key.id}}"]?.try do |v|
-            {% if value[:type].stringify == "Int32" %}
-              @{{key.id}} = v.as_i64?.try &.to_i32
-            {% end %}
-          end
+          {% if value[:default] != nil %}
+            @{{key.id}} =  if %found{key.id}
+              %any["{{key.id}}"]?.try do |v|
+                {% if value[:type].stringify == "Int32" %}
+                  @{{key.id}} = v.as_i64?.try &.to_i32
+                {% end %}
+              end
+            else
+              {{value[:default]}}
+            end
+          {% else %}
+            @{{key.id}} = %var{key.id}
+          {% end %}
+
         {% else %}
 
           {% if value[:type].stringify == "String" %}
