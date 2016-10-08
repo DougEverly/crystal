@@ -430,28 +430,28 @@ describe "JSON mapping" do
         json.d.should eq true
       end
 
-      # it "bool (JSON::Any)" do
-      #   j = JSON.parse(%({}))
-      #   json = JsonWithDefaults.from_json(j)
-      #   json.c.should eq true
-      #   typeof(json.c).should eq Bool
-      #   json.d.should eq false
-      #   typeof(json.d).should eq Bool
+      it "bool (JSON::Any)" do
+        j = JSON.parse(%({}))
+        json = JsonWithDefaults.from_json(j)
+        json.c.should eq true
+        typeof(json.c).should eq Bool
+        json.d.should eq false
+        typeof(json.d).should eq Bool
 
-      #   j = JSON.parse(%({"c":false}))
-      #   json = JsonWithDefaults.from_json(j)
-      #   json.c.should eq false
-      #   j = JSON.parse(%({"c":true}))
-      #   json = JsonWithDefaults.from_json(j)
-      #   json.c.should eq true
+        # j = JSON.parse(%({"c":false}))
+        # json = JsonWithDefaults.from_json(j)
+        # json.c.should eq false
+        # j = JSON.parse(%({"c":true}))
+        # json = JsonWithDefaults.from_json(j)
+        # json.c.should eq true
 
-      #   j = JSON.parse(%({"d":false}))
-      #   json = JsonWithDefaults.from_json(j)
-      #   json.d.should eq false
-      #   j = JSON.parse(%({"d":true}))
-      #   json = JsonWithDefaults.from_json(j)
-      #   json.d.should eq true
-      # end
+        # j = JSON.parse(%({"d":false}))
+        # json = JsonWithDefaults.from_json(j)
+        # json.d.should eq false
+        # j = JSON.parse(%({"d":true}))
+        # json = JsonWithDefaults.from_json(j)
+        # json.d.should eq true
+      end
 
       it "with nilable" do
         json = JsonWithDefaults.from_json(%({}))
