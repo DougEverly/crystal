@@ -185,11 +185,11 @@ describe "JSON mapping" do
       people.size.should eq(2)
     end
 
-    # it "parses array of people (JSON::Any)" do
-    #   j = JSON.parse(%([{"name": "John"}, {"name": "Doe"}]))
-    #   people = Array(JSONPerson).from_json(j)
-    #   people.size.should eq(2)
-    # end
+    it "parses array of people (JSON::Any)" do
+      j = JSON.parse(%([{"name": "John"}, {"name": "Doe"}]))
+      people = Array(JSONPerson).from_json(j)
+      people.size.should eq(2)
+    end
 
   #   it "does to_json" do
   #     person = JSONPerson.from_json(%({"name": "John", "age": 30}))
