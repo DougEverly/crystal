@@ -31,11 +31,11 @@ private class JSONWithBool
   JSON.mapping value: Bool
 end
 
-# private class JSONWithTime
-#   JSON.mapping({
-#     value: {type: Time, converter: Time::Format.new("%F %T")},
-#   })
-# end
+private class JSONWithTime
+  JSON.mapping({
+    value: {type: Time, converter: Time::Format.new("%F %T")},
+  })
+end
 
 # private class JSONWithNilableTime
 #   JSON.mapping({
@@ -278,12 +278,12 @@ describe "JSON mapping" do
       json.value.should be_false
     end
 
-    # it "parses json with Time::Format converter" do
-    #   json = JSONWithTime.from_json(%({"value": "2014-10-31 23:37:16"}))
-    #   json.value.should be_a(Time)
-    #   json.value.to_s.should eq("2014-10-31 23:37:16")
-    #   json.to_json.should eq(%({"value":"2014-10-31 23:37:16"}))
-    # end
+    it "parses json with Time::Format converter" do
+      json = JSONWithTime.from_json(%({"value": "2014-10-31 23:37:16"}))
+      json.value.should be_a(Time)
+      json.value.to_s.should eq("2014-10-31 23:37:16")
+      json.to_json.should eq(%({"value":"2014-10-31 23:37:16"}))
+    end
 
   #   it "allows setting a nilable property to nil" do
   #     person = JSONPerson.new("John")
