@@ -232,11 +232,18 @@ describe "JSON mapping" do
       end
     end
 
-  #   it "raises if non-nilable attribute is nil" do
-  #     expect_raises JSON::ParseException, "missing json attribute: name" do
-  #       JSONPerson.from_json(%({"age": 30}))
-  #     end
-  #   end
+    it "raises if non-nilable attribute is nil" do
+      expect_raises JSON::ParseException, "missing json attribute: name" do
+        JSONPerson.from_json(%({"age": 30}))
+      end
+    end
+
+    it "raises if non-nilable attribute is nil (JSON::Any)" do
+      j = JSON.parse(%({"age": 30}))
+      expect_raises JSON::ParseException, "missing json attribute: name" do
+        JSONPerson.from_json(j)
+      end
+    end
 
   #   it "doesn't emit null by default when doing to_json" do
   #     person = JSONPerson.from_json(%({"name": "John"}))
