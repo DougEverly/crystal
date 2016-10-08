@@ -96,6 +96,13 @@ module JSON
         end
       end
 
+      {% for key, value in properties %}
+        {% unless value[:nilable] || value[:default] != nil %}
+          if %var{key.id}.is_a?(Nil) && !%found{key.id} && !Union({{value[:type]}}).nilable?
+            #raise JSON::ParseException.new("missing json attribute: {{(value[:key] || key).id}}", 0, 0)
+          end
+        {% end %}
+      {% end %}
 
 
       {% for key, value in properties %}
@@ -113,6 +120,8 @@ module JSON
 
           {% if value[:type].stringify == "String" %}
             @{{key.id}} = %any["{{key.id}}"].as_s
+          {% elsif value[:type].stringify == "Bool" %}
+            @{{key.id}} = %any["{{key.id}}"].as_bool
           {% end %}
 
         {% end %}
