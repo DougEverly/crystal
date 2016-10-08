@@ -172,18 +172,24 @@ describe "JSON mapping" do
       person.age.should be_nil
     end
 
-  #   it "parses person without age" do
-  #     person = JSONPerson.from_json(%({"name": "John"}))
-  #     person.should be_a(JSONPerson)
-  #     person.name.should eq("John")
-  #     person.name.size.should eq(4) # This verifies that name is not nilable
-  #     person.age.should be_nil
-  #   end
+    it "parses person without age" do
+      person = JSONPerson.from_json(%({"name": "John"}))
+      person.should be_a(JSONPerson)
+      person.name.should eq("John")
+      person.name.size.should eq(4) # This verifies that name is not nilable
+      person.age.should be_nil
+    end
 
-  #   it "parses array of people" do
-  #     people = Array(JSONPerson).from_json(%([{"name": "John"}, {"name": "Doe"}]))
-  #     people.size.should eq(2)
-  #   end
+    it "parses array of people" do
+      people = Array(JSONPerson).from_json(%([{"name": "John"}, {"name": "Doe"}]))
+      people.size.should eq(2)
+    end
+
+    # it "parses array of people (JSON::Any)" do
+    #   j = JSON.parse(%([{"name": "John"}, {"name": "Doe"}]))
+    #   people = Array(JSONPerson).from_json(j)
+    #   people.size.should eq(2)
+    # end
 
   #   it "does to_json" do
   #     person = JSONPerson.from_json(%({"name": "John", "age": 30}))

@@ -81,67 +81,30 @@ module JSON
         %found{key.id} = false
       {% end %}
 
-      %any.to_h.keys.each do |key|
-        case key
-        {% for key, value in properties %}
-          when {{value[:key] || key.id.stringify}}
-            %found{key.id} = true
 
-            %var{key.id} =
-              {% if value[:nilable] || value[:default] != nil %}
-                %any[key]
-              {% elsif value[:root] %}
-                %any[{{value[:root]}}]
-              {% elsif value[:converter] %}
-                {{value[:converter]}}.from_json(%any[key])
-              {% elsif value[:type].is_a?(Path) || value[:type].is_a?(Generic) %}
-                {{value[:type]}}.new(%any)
-              {% else %}
-                Union({{value[:type]}}).new(%any)
-              {% end %}
-
-
-
-        {% end %}
-        else
-          {% if strict %}
-            raise JSON::ParseException.new("unknown json attribute: #{key}", 0, 0)
-          {% else %}
-            %pull.skip
-          {% end %}
-        end
-      end
       {% for key, value in properties %}
-        {% if value[:nilable] %}
-        "hi"
-          %found{key.id}
-          "{{key}} {{value}}  nilable"
-          {% if value[:default] != nil %}
-            @{{key.id}} = %found{key.id} ? %var{key.id} : {{value[:default]}}
-          {% else %}
+        "{{ key.id }}"
+        "{{ value[:type] }}"
+        "{{ value[:nilable] }}"
 
-          {% if value[:type].stringify == "Int32" %}
-            @{{key.id}} = (%var{key.id}).as_i?
-          {% elsif value[:type].stringify == "Int64" %}
-            @{{key.id}} = (%var{key.id}).as_i64?
-          {% elsif value[:type].stringify == "String" %}
-            @{{key.id}} = (%var{key.id}).as_s?
-          {% else %}
-            "oops"
+        {% if value[:nilable] %}
+          @{{key.id}} = %any["{{key.id}}"]?.try do |v|
+            {% if value[:type].stringify == "Int32" %}
+              @{{key.id}} = v.as_i64?.try &.to_i32
             {% end %}
-          {% end %}
-        {% elsif value[:default] != nil %}
-          @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : %var{key.id}
-        {% elsif value[:type].stringify == "Int32" %}
-          @{{key.id}} = (%var{key.id}).as_i
-        {% elsif value[:type].stringify == "Int64" %}
-          @{{key.id}} = (%var{key.id}).as_i64
-        {% elsif value[:type].stringify == "String" %}
-          @{{key.id}} = (%var{key.id}).as_s
+          end
         {% else %}
-          "oops"
+
+          {% if value[:type].stringify == "String" %}
+            @{{key.id}} = %any["{{key.id}}"].as_s
+          {% end %}
+
         {% end %}
+
       {% end %}
+
+        "hi"
+
 
       {% debug() %}
     end
