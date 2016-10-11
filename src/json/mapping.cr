@@ -98,6 +98,8 @@ module JSON
 
       end
 
+      
+
       {% for key, value in properties %}
         {% unless value[:nilable] || value[:default] != nil %}
           if %var{key.id}.is_a?(Nil) && !%found{key.id} && !Union({{value[:type]}}).nilable?
@@ -120,6 +122,9 @@ module JSON
             @{{key.id}} = %found{key.id} ? %var{key.id} : {{value[:default]}}
           {% else %}
 
+            if %var{key.id}.nil?
+              @{{key.id}} = nil
+            else
             {% if value[:type].stringify == "String" %}
               @{{key.id}} = (%var{key.id}).as(String)
             {% elsif value[:type].stringify == "Int64" %}
@@ -127,6 +132,7 @@ module JSON
             {% elsif value[:type].stringify == "Int32" %}
               @{{key.id}} = (%var{key.id}).as(Int64).to_i32
             {% end %}
+            end
           {% end %}
 
         {% elsif value[:default] != nil %}
