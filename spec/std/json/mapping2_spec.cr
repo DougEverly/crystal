@@ -20,12 +20,12 @@ private class StrictJSONPerson
   }, true)
 end
 
-# private class JSONPersonEmittingNull
-#   JSON.mapping({
-#     name: {type: String},
-#     age:  {type: Int32, nilable: true, emit_null: true},
-#   })
-# end
+private class JSONPersonEmittingNull
+  JSON.mapping({
+    name: {type: String},
+    age:  {type: Int32, nilable: true, emit_null: true},
+  })
+end
 
 # private class JSONWithBool
 #   JSON.mapping value: Bool
@@ -180,92 +180,92 @@ describe "JSON mapping" do
       person.age.should be_nil
     end
 
-    # it "parses array of people" do
-    #   people = Array(JSONPerson).from_json(%([{"name": "John"}, {"name": "Doe"}]))
-    #   people.size.should eq(2)
-    # end
+    it "parses array of people" do
+      people = Array(JSONPerson).from_json(%([{"name": "John"}, {"name": "Doe"}]))
+      people.size.should eq(2)
+    end
 
-    # it "parses array of people (JSON::Any)" do
-    #   j = JSON.parse(%([{"name": "John"}, {"name": "Doe"}]))
-    #   people = Array(JSONPerson).from_json(j)
-    #   people.size.should eq(2)
-    # end
+    it "parses array of people (JSON::Any)" do
+      j = JSON.parse(%([{"name": "John"}, {"name": "Doe"}]))
+      people = Array(JSONPerson).from_json(j)
+      people.size.should eq(2)
+    end
 
-    # it "does to_json" do
-    #   person = JSONPerson.from_json(%({"name": "John", "age": 30}))
-    #   person2 = JSONPerson.from_json(person.to_json)
-    #   person2.should eq(person)
-    # end
+    it "does to_json" do
+      person = JSONPerson.from_json(%({"name": "John", "age": 30}))
+      person2 = JSONPerson.from_json(person.to_json)
+      person2.should eq(person)
+    end
 
-    # it "does to_json (JSON::Any)" do
-    #   j = JSON.parse(%({"name": "John", "age": 30}))
-    #   person = JSONPerson.from_json(j)
-    #   person2 = JSONPerson.from_json(person.to_json)
-    #   person2.should eq(person)
-    # end
+    it "does to_json (JSON::Any)" do
+      j = JSON.parse(%({"name": "John", "age": 30}))
+      person = JSONPerson.from_json(j)
+      person2 = JSONPerson.from_json(person.to_json)
+      person2.should eq(person)
+    end
 
-    # it "parses person with unknown attributes" do
-    #   person = JSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
-    #   person.should be_a(JSONPerson)
-    #   person.name.should eq("John")
-    #   person.age.should eq(30)
-    # end
+    it "parses person with unknown attributes" do
+      person = JSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
+      person.should be_a(JSONPerson)
+      person.name.should eq("John")
+      person.age.should eq(30)
+    end
 
-    # it "parses person with unknown attributes (JSON::Any)" do
-    #   j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
-    #   person = JSONPerson.from_json(j)
-    #   person.should be_a(JSONPerson)
-    #   person.name.should eq("John")
-    #   person.age.should eq(30)
-    # end
+    it "parses person with unknown attributes (JSON::Any)" do
+      j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
+      person = JSONPerson.from_json(j)
+      person.should be_a(JSONPerson)
+      person.name.should eq("John")
+      person.age.should eq(30)
+    end
 
-    # it "parses strict person with unknown attributes" do
-    #   expect_raises JSON::ParseException, "unknown json attribute: foo" do
-    #     StrictJSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
-    #   end
-    # end
+    it "parses strict person with unknown attributes" do
+      expect_raises JSON::ParseException, "unknown json attribute: foo" do
+        StrictJSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
+      end
+    end
 
-    # it "parses strict person with unknown attributes (JSON::Any)" do
-    #   j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
-    #   expect_raises JSON::ParseException, "unknown json attribute: foo" do
-    #     StrictJSONPerson.from_json(j)
-    #   end
-    # end
+    it "parses strict person with unknown attributes (JSON::Any)" do
+      j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
+      expect_raises JSON::ParseException, "unknown json attribute: foo" do
+        StrictJSONPerson.from_json(j)
+      end
+    end
 
-    # it "raises if non-nilable attribute is nil" do
-    #   expect_raises JSON::ParseException, "missing json attribute: name" do
-    #     JSONPerson.from_json(%({"age": 30}))
-    #   end
-    # end
+    it "raises if non-nilable attribute is nil" do
+      expect_raises JSON::ParseException, "missing json attribute: name" do
+        JSONPerson.from_json(%({"age": 30}))
+      end
+    end
 
-    # it "raises if non-nilable attribute is nil (JSON::Any)" do
-    #   j = JSON.parse(%({"age": 30}))
-    #   expect_raises JSON::ParseException, "missing json attribute: name" do
-    #     JSONPerson.from_json(j)
-    #   end
-    # end
+    it "raises if non-nilable attribute is nil (JSON::Any)" do
+      j = JSON.parse(%({"age": 30}))
+      expect_raises JSON::ParseException, "missing json attribute: name" do
+        JSONPerson.from_json(j)
+      end
+    end
 
-    # it "doesn't emit null by default when doing to_json" do
-    #   person = JSONPerson.from_json(%({"name": "John"}))
-    #   (person.to_json =~ /age/).should be_falsey
-    # end
+    it "doesn't emit null by default when doing to_json" do
+      person = JSONPerson.from_json(%({"name": "John"}))
+      (person.to_json =~ /age/).should be_falsey
+    end
 
-    # it "doesn't emit null by default when doing to_json (JSON::Any)" do
-    #   j = JSON.parse(%({"name": "John"}))
-    #   person = JSONPerson.from_json(j)
-    #   (person.to_json =~ /age/).should be_falsey
-    # end
+    it "doesn't emit null by default when doing to_json (JSON::Any)" do
+      j = JSON.parse(%({"name": "John"}))
+      person = JSONPerson.from_json(j)
+      (person.to_json =~ /age/).should be_falsey
+    end
 
-    # it "emits null on request when doing to_json" do
-    #   person = JSONPersonEmittingNull.from_json(%({"name": "John"}))
-    #   (person.to_json =~ /age/).should be_truthy
-    # end
+    it "emits null on request when doing to_json" do
+      person = JSONPersonEmittingNull.from_json(%({"name": "John"}))
+      (person.to_json =~ /age/).should be_truthy
+    end
 
-    # it "emits null on request when doing to_json (JSON::Any)" do
-    #   j = JSON.parse(%({"name": "John"}))
-    #   person = JSONPersonEmittingNull.from_json(j)
-    #   (person.to_json =~ /age/).should be_truthy
-    # end
+    it "emits null on request when doing to_json (JSON::Any)" do
+      j = JSON.parse(%({"name": "John"}))
+      person = JSONPersonEmittingNull.from_json(j)
+      (person.to_json =~ /age/).should be_truthy
+    end
 
     # it "doesn't raises on false value when not-nil" do
     #   json = JSONWithBool.from_json(%({"value": false}))

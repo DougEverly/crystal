@@ -92,7 +92,10 @@ module JSON
             %var{key.id} = value
           {% end %}
           else
-            raise JSON::ParseException.new("unknown json attribute: #{key}", 0, 0)
+            {% if strict %}
+              raise JSON::ParseException.new("unknown json attribute: #{key}", 0, 0)
+            {% else %}
+            {% end %}
           end
         end
 
