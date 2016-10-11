@@ -263,6 +263,12 @@ struct Time::Format
     string = pull.read_string
     parse(string)
   end
+
+  def from_json(any : JSON::Any)
+    string = any.as_s
+    parse(string)
+  end
+
 end
 
 module Time::EpochConverter

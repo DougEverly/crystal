@@ -31,11 +31,11 @@ private class JSONWithBool
   JSON.mapping value: Bool
 end
 
-private class JSONWithTime
-  JSON.mapping({
-    value: {type: Time, converter: Time::Format.new("%F %T")},
-  })
-end
+# private class JSONWithTime
+#   JSON.mapping({
+#     value: {type: Time, converter: Time::Format.new("%F %T")},
+#   })
+# end
 
 private class JSONWithNilableTime
   JSON.mapping({
@@ -55,17 +55,17 @@ end
 #   end
 # end
 
-# private class JSONWithSimpleMapping
-#   JSON.mapping({name: String, age: Int32})
-# end
+private class JSONWithSimpleMapping
+  JSON.mapping({name: String, age: Int32})
+end
 
-# private class JSONWithKeywordsMapping
-#   JSON.mapping({end: Int32, abstract: Int32})
-# end
+private class JSONWithKeywordsMapping
+  JSON.mapping({end: Int32, abstract: Int32})
+end
 
-# # private class JSONWithAny
-# #   JSON.mapping({name: String, any: JSON::Any})
-# # end
+# private class JSONWithAny
+#   JSON.mapping({name: String, any: JSON::Any})
+# end
 
 # private class JsonWithProblematicKeys
 #   JSON.mapping({
@@ -278,12 +278,12 @@ describe "JSON mapping" do
       json.value.should be_false
     end
 
-    it "parses json with Time::Format converter" do
-      json = JSONWithTime.from_json(%({"value": "2014-10-31 23:37:16"}))
-      json.value.should be_a(Time)
-      json.value.to_s.should eq("2014-10-31 23:37:16")
-      json.to_json.should eq(%({"value":"2014-10-31 23:37:16"}))
-    end
+    # it "parses json with Time::Format converter" do
+    #   json = JSONWithTime.from_json(%({"value": "2014-10-31 23:37:16"}))
+    #   json.value.should be_a(Time)
+    #   json.value.to_s.should eq("2014-10-31 23:37:16")
+    #   json.to_json.should eq(%({"value":"2014-10-31 23:37:16"}))
+    # end
 
     it "allows setting a nilable property to nil" do
       person = JSONPerson.new("John")
@@ -291,26 +291,26 @@ describe "JSON mapping" do
       person.age = nil
     end
 
-    # it "allows setting a nilable property to nil (JSON::Any)" do
-    #   person = JSONPerson.new("John")
-    #   person.age = 1
-    #   person.age = nil
-    # end
+    it "allows setting a nilable property to nil (JSON::Any)" do
+      person = JSONPerson.new("John")
+      person.age = 1
+      person.age = nil
+    end
 
-    # it "parses simple mapping" do
-    #   person = JSONWithSimpleMapping.from_json(%({"name": "John", "age": 30}))
-    #   person.should be_a(JSONWithSimpleMapping)
-    #   person.name.should eq("John")
-    #   person.age.should eq(30)
-    # end
+    it "parses simple mapping" do
+      person = JSONWithSimpleMapping.from_json(%({"name": "John", "age": 30}))
+      person.should be_a(JSONWithSimpleMapping)
+      person.name.should eq("John")
+      person.age.should eq(30)
+    end
 
-    # it "parses simple mapping (JSON::Any)" do
-    #   j = JSON.parse(%({"name": "John", "age": 30}))
-    #   person = JSONWithSimpleMapping.from_json(j)
-    #   person.should be_a(JSONWithSimpleMapping)
-    #   person.name.should eq("John")
-    #   person.age.should eq(30)
-    # end
+    it "parses simple mapping (JSON::Any)" do
+      j = JSON.parse(%({"name": "John", "age": 30}))
+      person = JSONWithSimpleMapping.from_json(j)
+      person.should be_a(JSONWithSimpleMapping)
+      person.name.should eq("John")
+      person.age.should eq(30)
+    end
 
     # it "outputs with converter when nilable" do
     #   json = JSONWithNilableTime.new

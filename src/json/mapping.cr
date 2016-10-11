@@ -89,7 +89,11 @@ module JSON
           when {{value[:key] || key.id.stringify}}
             # {{value[:type]}}
             %found{key.id} = true
-            %var{key.id} = value
+            {% if value[:converter] %}
+              %var{key.id} = {{value[:converter]}}.from_json(JSON::Any.new(value))
+            {% else %}
+              %var{key.id} = value
+            {% end %}
           {% end %}
           else
             {% if strict %}
@@ -162,6 +166,8 @@ module JSON
             @{{key.id}} = (%var{key.id}).as(Bool)
           {% elsif value[:type].stringify == "Int64" %}
             @{{key.id}} = (%var{key.id}).as(Int64)
+          {% elsif value[:type].stringify == "Int32" %}
+            @{{key.id}} = (%var{key.id}).as(Int64).to_i32
           {% end %}
 
         {% end %}
