@@ -158,6 +158,8 @@ module JSON
 
           {% if value[:type].stringify == "String" %}
             @{{key.id}} = (%var{key.id}).as(String)
+          {% elsif value[:type].stringify == "Bool" %}
+            @{{key.id}} = (%var{key.id}).as(Bool)
           {% elsif value[:type].stringify == "Int64" %}
             @{{key.id}} = (%var{key.id}).as(Int64)
           {% end %}
