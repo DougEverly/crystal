@@ -13,102 +13,102 @@ private class JSONPerson
   end
 end
 
-private class StrictJSONPerson
-  JSON.mapping({
-    name: {type: String},
-    age:  {type: Int32, nilable: true},
-  }, true)
-end
+# private class StrictJSONPerson
+#   JSON.mapping({
+#     name: {type: String},
+#     age:  {type: Int32, nilable: true},
+#   }, true)
+# end
 
-private class JSONPersonEmittingNull
-  JSON.mapping({
-    name: {type: String},
-    age:  {type: Int32, nilable: true, emit_null: true},
-  })
-end
+# private class JSONPersonEmittingNull
+#   JSON.mapping({
+#     name: {type: String},
+#     age:  {type: Int32, nilable: true, emit_null: true},
+#   })
+# end
 
-private class JSONWithBool
-  JSON.mapping value: Bool
-end
+# private class JSONWithBool
+#   JSON.mapping value: Bool
+# end
 
-private class JSONWithTime
-  JSON.mapping({
-    value: {type: Time, converter: Time::Format.new("%F %T")},
-  })
-end
+# private class JSONWithTime
+#   JSON.mapping({
+#     value: {type: Time, converter: Time::Format.new("%F %T")},
+#   })
+# end
 
-private class JSONWithNilableTime
-  JSON.mapping({
-    value: {type: Time, nilable: true, converter: Time::Format.new("%F")},
-  })
+# private class JSONWithNilableTime
+#   JSON.mapping({
+#     value: {type: Time, nilable: true, converter: Time::Format.new("%F")},
+#   })
 
-  def initialize
-  end
-end
+#   def initialize
+#   end
+# end
 
-private class JSONWithNilableTimeEmittingNull
-  JSON.mapping({
-    value: {type: Time, nilable: true, converter: Time::Format.new("%F"), emit_null: true},
-  })
+# private class JSONWithNilableTimeEmittingNull
+#   JSON.mapping({
+#     value: {type: Time, nilable: true, converter: Time::Format.new("%F"), emit_null: true},
+#   })
 
-  def initialize
-  end
-end
+#   def initialize
+#   end
+# end
 
-private class JSONWithSimpleMapping
-  JSON.mapping({name: String, age: Int32})
-end
+# private class JSONWithSimpleMapping
+#   JSON.mapping({name: String, age: Int32})
+# end
 
-private class JSONWithKeywordsMapping
-  JSON.mapping({end: Int32, abstract: Int32})
-end
+# private class JSONWithKeywordsMapping
+#   JSON.mapping({end: Int32, abstract: Int32})
+# end
 
-private class JSONWithAny
-  JSON.mapping({name: String, any: JSON::Any})
-end
+# # private class JSONWithAny
+# #   JSON.mapping({name: String, any: JSON::Any})
+# # end
 
-private class JsonWithProblematicKeys
-  JSON.mapping({
-    key:  Int32,
-    pull: Int32,
-  })
-end
+# private class JsonWithProblematicKeys
+#   JSON.mapping({
+#     key:  Int32,
+#     pull: Int32,
+#   })
+# end
 
-private class JsonWithSet
-  JSON.mapping({set: Set(String)})
-end
+# private class JsonWithSet
+#   JSON.mapping({set: Set(String)})
+# end
 
-private class JsonWithDefaults
-  JSON.mapping({
-    a: {type: Int32, default: 11},
-    b: {type: String, default: "Haha"},
-    c: {type: Bool, default: true},
-    d: {type: Bool, default: false},
-    e: {type: Bool, nilable: true, default: false},
-    f: {type: Int32, nilable: true, default: 1},
-    g: {type: Int32, nilable: true, default: nil},
-    h: {type: Array(Int32), default: [1, 2, 3]},
-  })
-end
+# private class JsonWithDefaults
+#   JSON.mapping({
+#     a: {type: Int32, default: 11},
+#     b: {type: String, default: "Haha"},
+#     c: {type: Bool, default: true},
+#     d: {type: Bool, default: false},
+#     e: {type: Bool, nilable: true, default: false},
+#     f: {type: Int32, nilable: true, default: 1},
+#     g: {type: Int32, nilable: true, default: nil},
+#     h: {type: Array(Int32), default: [1, 2, 3]},
+#   })
+# end
 
-private class JSONWithSmallIntegers
-  JSON.mapping({
-    foo: Int16,
-    bar: Int8,
-  })
-end
+# private class JSONWithSmallIntegers
+#   JSON.mapping({
+#     foo: Int16,
+#     bar: Int8,
+#   })
+# end
 
-private class JSONWithTimeEpoch
-  JSON.mapping({
-    value: {type: Time, converter: Time::EpochConverter},
-  })
-end
+# private class JSONWithTimeEpoch
+#   JSON.mapping({
+#     value: {type: Time, converter: Time::EpochConverter},
+#   })
+# end
 
-private class JSONWithTimeEpochMillis
-  JSON.mapping({
-    value: {type: Time, converter: Time::EpochMillisConverter},
-  })
-end
+# private class JSONWithTimeEpochMillis
+#   JSON.mapping({
+#     value: {type: Time, converter: Time::EpochMillisConverter},
+#   })
+# end
 
 # private class JSONWithRaw
 #   JSON.mapping({
@@ -162,325 +162,325 @@ describe "JSON mapping" do
       person.age.should eq(30)
     end
 
-    it "parses person without age (JSON::Any)" do
-      j = JSON.parse(%({"name": "John"}))
+    # it "parses person without age (JSON::Any)" do
+    #   j = JSON.parse(%({"name": "John"}))
 
-      person = JSONPerson.from_json(j)
-      person.should be_a(JSONPerson)
-      person.name.should eq("John")
-      person.name.size.should eq(4) # This verifies that name is not nilable
-      person.age.should be_nil
-    end
+    #   person = JSONPerson.from_json(j)
+    #   person.should be_a(JSONPerson)
+    #   person.name.should eq("John")
+    #   person.name.size.should eq(4) # This verifies that name is not nilable
+    #   person.age.should be_nil
+    # end
 
-    it "parses person without age" do
-      person = JSONPerson.from_json(%({"name": "John"}))
-      person.should be_a(JSONPerson)
-      person.name.should eq("John")
-      person.name.size.should eq(4) # This verifies that name is not nilable
-      person.age.should be_nil
-    end
+    # it "parses person without age" do
+    #   person = JSONPerson.from_json(%({"name": "John"}))
+    #   person.should be_a(JSONPerson)
+    #   person.name.should eq("John")
+    #   person.name.size.should eq(4) # This verifies that name is not nilable
+    #   person.age.should be_nil
+    # end
 
-    it "parses array of people" do
-      people = Array(JSONPerson).from_json(%([{"name": "John"}, {"name": "Doe"}]))
-      people.size.should eq(2)
-    end
+    # it "parses array of people" do
+    #   people = Array(JSONPerson).from_json(%([{"name": "John"}, {"name": "Doe"}]))
+    #   people.size.should eq(2)
+    # end
 
-    it "parses array of people (JSON::Any)" do
-      j = JSON.parse(%([{"name": "John"}, {"name": "Doe"}]))
-      people = Array(JSONPerson).from_json(j)
-      people.size.should eq(2)
-    end
+    # it "parses array of people (JSON::Any)" do
+    #   j = JSON.parse(%([{"name": "John"}, {"name": "Doe"}]))
+    #   people = Array(JSONPerson).from_json(j)
+    #   people.size.should eq(2)
+    # end
 
-    it "does to_json" do
-      person = JSONPerson.from_json(%({"name": "John", "age": 30}))
-      person2 = JSONPerson.from_json(person.to_json)
-      person2.should eq(person)
-    end
+    # it "does to_json" do
+    #   person = JSONPerson.from_json(%({"name": "John", "age": 30}))
+    #   person2 = JSONPerson.from_json(person.to_json)
+    #   person2.should eq(person)
+    # end
 
-    it "does to_json (JSON::Any)" do
-      j = JSON.parse(%({"name": "John", "age": 30}))
-      person = JSONPerson.from_json(j)
-      person2 = JSONPerson.from_json(person.to_json)
-      person2.should eq(person)
-    end
+    # it "does to_json (JSON::Any)" do
+    #   j = JSON.parse(%({"name": "John", "age": 30}))
+    #   person = JSONPerson.from_json(j)
+    #   person2 = JSONPerson.from_json(person.to_json)
+    #   person2.should eq(person)
+    # end
 
-    it "parses person with unknown attributes" do
-      person = JSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
-      person.should be_a(JSONPerson)
-      person.name.should eq("John")
-      person.age.should eq(30)
-    end
+    # it "parses person with unknown attributes" do
+    #   person = JSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
+    #   person.should be_a(JSONPerson)
+    #   person.name.should eq("John")
+    #   person.age.should eq(30)
+    # end
 
-    it "parses person with unknown attributes (JSON::Any)" do
-      j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
-      person = JSONPerson.from_json(j)
-      person.should be_a(JSONPerson)
-      person.name.should eq("John")
-      person.age.should eq(30)
-    end
+    # it "parses person with unknown attributes (JSON::Any)" do
+    #   j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
+    #   person = JSONPerson.from_json(j)
+    #   person.should be_a(JSONPerson)
+    #   person.name.should eq("John")
+    #   person.age.should eq(30)
+    # end
 
-    it "parses strict person with unknown attributes" do
-      expect_raises JSON::ParseException, "unknown json attribute: foo" do
-        StrictJSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
-      end
-    end
+    # it "parses strict person with unknown attributes" do
+    #   expect_raises JSON::ParseException, "unknown json attribute: foo" do
+    #     StrictJSONPerson.from_json(%({"name": "John", "age": 30, "foo": "bar"}))
+    #   end
+    # end
 
-    it "parses strict person with unknown attributes (JSON::Any)" do
-      j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
-      expect_raises JSON::ParseException, "unknown json attribute: foo" do
-        StrictJSONPerson.from_json(j)
-      end
-    end
+    # it "parses strict person with unknown attributes (JSON::Any)" do
+    #   j = JSON.parse(%({"name": "John", "age": 30, "foo": "bar"}))
+    #   expect_raises JSON::ParseException, "unknown json attribute: foo" do
+    #     StrictJSONPerson.from_json(j)
+    #   end
+    # end
 
-    it "raises if non-nilable attribute is nil" do
-      expect_raises JSON::ParseException, "missing json attribute: name" do
-        JSONPerson.from_json(%({"age": 30}))
-      end
-    end
+    # it "raises if non-nilable attribute is nil" do
+    #   expect_raises JSON::ParseException, "missing json attribute: name" do
+    #     JSONPerson.from_json(%({"age": 30}))
+    #   end
+    # end
 
-    it "raises if non-nilable attribute is nil (JSON::Any)" do
-      j = JSON.parse(%({"age": 30}))
-      expect_raises JSON::ParseException, "missing json attribute: name" do
-        JSONPerson.from_json(j)
-      end
-    end
+    # it "raises if non-nilable attribute is nil (JSON::Any)" do
+    #   j = JSON.parse(%({"age": 30}))
+    #   expect_raises JSON::ParseException, "missing json attribute: name" do
+    #     JSONPerson.from_json(j)
+    #   end
+    # end
 
-    it "doesn't emit null by default when doing to_json" do
-      person = JSONPerson.from_json(%({"name": "John"}))
-      (person.to_json =~ /age/).should be_falsey
-    end
+    # it "doesn't emit null by default when doing to_json" do
+    #   person = JSONPerson.from_json(%({"name": "John"}))
+    #   (person.to_json =~ /age/).should be_falsey
+    # end
 
-    it "doesn't emit null by default when doing to_json (JSON::Any)" do
-      j = JSON.parse(%({"name": "John"}))
-      person = JSONPerson.from_json(j)
-      (person.to_json =~ /age/).should be_falsey
-    end
+    # it "doesn't emit null by default when doing to_json (JSON::Any)" do
+    #   j = JSON.parse(%({"name": "John"}))
+    #   person = JSONPerson.from_json(j)
+    #   (person.to_json =~ /age/).should be_falsey
+    # end
 
-    it "emits null on request when doing to_json" do
-      person = JSONPersonEmittingNull.from_json(%({"name": "John"}))
-      (person.to_json =~ /age/).should be_truthy
-    end
+    # it "emits null on request when doing to_json" do
+    #   person = JSONPersonEmittingNull.from_json(%({"name": "John"}))
+    #   (person.to_json =~ /age/).should be_truthy
+    # end
 
-    it "emits null on request when doing to_json (JSON::Any)" do
-      j = JSON.parse(%({"name": "John"}))
-      person = JSONPersonEmittingNull.from_json(j)
-      (person.to_json =~ /age/).should be_truthy
-    end
+    # it "emits null on request when doing to_json (JSON::Any)" do
+    #   j = JSON.parse(%({"name": "John"}))
+    #   person = JSONPersonEmittingNull.from_json(j)
+    #   (person.to_json =~ /age/).should be_truthy
+    # end
 
-    it "doesn't raises on false value when not-nil" do
-      json = JSONWithBool.from_json(%({"value": false}))
-      json.value.should be_false
-    end
+    # it "doesn't raises on false value when not-nil" do
+    #   json = JSONWithBool.from_json(%({"value": false}))
+    #   json.value.should be_false
+    # end
 
-    it "doesn't raises on false value when not-nil (JSON::Any)" do
-      j = JSON.parse(%({"value": false}))
-      json = JSONWithBool.from_json(j)
-      json.value.should be_false
-    end
+    # it "doesn't raises on false value when not-nil (JSON::Any)" do
+    #   j = JSON.parse(%({"value": false}))
+    #   json = JSONWithBool.from_json(j)
+    #   json.value.should be_false
+    # end
 
-    it "parses json with Time::Format converter" do
-      json = JSONWithTime.from_json(%({"value": "2014-10-31 23:37:16"}))
-      json.value.should be_a(Time)
-      json.value.to_s.should eq("2014-10-31 23:37:16")
-      json.to_json.should eq(%({"value":"2014-10-31 23:37:16"}))
-    end
+    # it "parses json with Time::Format converter" do
+    #   json = JSONWithTime.from_json(%({"value": "2014-10-31 23:37:16"}))
+    #   json.value.should be_a(Time)
+    #   json.value.to_s.should eq("2014-10-31 23:37:16")
+    #   json.to_json.should eq(%({"value":"2014-10-31 23:37:16"}))
+    # end
 
-    it "allows setting a nilable property to nil" do
-      person = JSONPerson.new("John")
-      person.age = 1
-      person.age = nil
-    end
+    # it "allows setting a nilable property to nil" do
+    #   person = JSONPerson.new("John")
+    #   person.age = 1
+    #   person.age = nil
+    # end
 
-    it "allows setting a nilable property to nil (JSON::Any)" do
-      person = JSONPerson.new("John")
-      person.age = 1
-      person.age = nil
-    end
+    # it "allows setting a nilable property to nil (JSON::Any)" do
+    #   person = JSONPerson.new("John")
+    #   person.age = 1
+    #   person.age = nil
+    # end
 
-    it "parses simple mapping" do
-      person = JSONWithSimpleMapping.from_json(%({"name": "John", "age": 30}))
-      person.should be_a(JSONWithSimpleMapping)
-      person.name.should eq("John")
-      person.age.should eq(30)
-    end
+    # it "parses simple mapping" do
+    #   person = JSONWithSimpleMapping.from_json(%({"name": "John", "age": 30}))
+    #   person.should be_a(JSONWithSimpleMapping)
+    #   person.name.should eq("John")
+    #   person.age.should eq(30)
+    # end
 
-    it "parses simple mapping (JSON::Any)" do
-      j = JSON.parse(%({"name": "John", "age": 30}))
-      person = JSONWithSimpleMapping.from_json(j)
-      person.should be_a(JSONWithSimpleMapping)
-      person.name.should eq("John")
-      person.age.should eq(30)
-    end
+    # it "parses simple mapping (JSON::Any)" do
+    #   j = JSON.parse(%({"name": "John", "age": 30}))
+    #   person = JSONWithSimpleMapping.from_json(j)
+    #   person.should be_a(JSONWithSimpleMapping)
+    #   person.name.should eq("John")
+    #   person.age.should eq(30)
+    # end
 
-    it "outputs with converter when nilable" do
-      json = JSONWithNilableTime.new
-      json.to_json.should eq("{}")
-    end
+    # it "outputs with converter when nilable" do
+    #   json = JSONWithNilableTime.new
+    #   json.to_json.should eq("{}")
+    # end
 
-    it "outputs with converter when nilable when emit_null is true" do
-      json = JSONWithNilableTimeEmittingNull.new
-      json.to_json.should eq(%({"value":null}))
-    end
+    # it "outputs with converter when nilable when emit_null is true" do
+    #   json = JSONWithNilableTimeEmittingNull.new
+    #   json.to_json.should eq(%({"value":null}))
+    # end
 
-    it "parses json with keywords" do
-      json = JSONWithKeywordsMapping.from_json(%({"end": 1, "abstract": 2}))
-      json.end.should eq(1)
-      json.abstract.should eq(2)
-    end
+    # it "parses json with keywords" do
+    #   json = JSONWithKeywordsMapping.from_json(%({"end": 1, "abstract": 2}))
+    #   json.end.should eq(1)
+    #   json.abstract.should eq(2)
+    # end
 
-    it "parses json with any" do
-      json = JSONWithAny.from_json(%({"name": "Hi", "any": [{"x": 1}, 2, "hey", true, false, 1.5, null]}))
-      json.name.should eq("Hi")
-      json.any.raw.should eq([{"x" => 1}, 2, "hey", true, false, 1.5, nil])
-      json.to_json.should eq(%({"name":"Hi","any":[{"x":1},2,"hey",true,false,1.5,null]}))
-    end
+    # # it "parses json with any" do
+    # #   json = JSONWithAny.from_json(%({"name": "Hi", "any": [{"x": 1}, 2, "hey", true, false, 1.5, null]}))
+    # #   json.name.should eq("Hi")
+    # #   json.any.raw.should eq([{"x" => 1}, 2, "hey", true, false, 1.5, nil])
+    # #   json.to_json.should eq(%({"name":"Hi","any":[{"x":1},2,"hey",true,false,1.5,null]}))
+    # # end
 
-    it "parses json with problematic keys" do
-      json = JsonWithProblematicKeys.from_json(%({"key": 1, "pull": 2}))
-      json.key.should eq(1)
-      json.pull.should eq(2)
-    end
+    # it "parses json with problematic keys" do
+    #   json = JsonWithProblematicKeys.from_json(%({"key": 1, "pull": 2}))
+    #   json.key.should eq(1)
+    #   json.pull.should eq(2)
+    # end
 
-    it "parses json array as set" do
-      json = JsonWithSet.from_json(%({"set": ["a", "a", "b"]}))
-      json.set.should eq(Set(String){"a", "b"})
-    end
+    # it "parses json array as set" do
+    #   json = JsonWithSet.from_json(%({"set": ["a", "a", "b"]}))
+    #   json.set.should eq(Set(String){"a", "b"})
+    # end
 
-    it "parses json array as set (JSON::Any)" do
-      j = JSON.parse(%({"set": ["a", "a", "b"]}))
-      json = JsonWithSet.from_json(j)
-      json.set.should eq(Set(String){"a", "b"})
-    end
+    # it "parses json array as set (JSON::Any)" do
+    #   j = JSON.parse(%({"set": ["a", "a", "b"]}))
+    #   json = JsonWithSet.from_json(j)
+    #   json.set.should eq(Set(String){"a", "b"})
+    # end
 
-    it "allows small types of integer" do
-      json = JSONWithSmallIntegers.from_json(%({"foo": 23, "bar": 7}))
+    # it "allows small types of integer" do
+    #   json = JSONWithSmallIntegers.from_json(%({"foo": 23, "bar": 7}))
 
-      json.foo.should eq(23)
-      typeof(json.foo).should eq(Int16)
+    #   json.foo.should eq(23)
+    #   typeof(json.foo).should eq(Int16)
 
-      json.bar.should eq(7)
-      typeof(json.bar).should eq(Int8)
-    end
+    #   json.bar.should eq(7)
+    #   typeof(json.bar).should eq(Int8)
+    # end
 
-    describe "parses json with defaults" do
-      it "mixed" do
-        json = JsonWithDefaults.from_json(%({"a":1,"b":"bla"}))
-        json.a.should eq 1
-        json.b.should eq "bla"
+    # describe "parses json with defaults" do
+    #   it "mixed" do
+    #     json = JsonWithDefaults.from_json(%({"a":1,"b":"bla"}))
+    #     json.a.should eq 1
+    #     json.b.should eq "bla"
 
-        json = JsonWithDefaults.from_json(%({"a":1}))
-        json.a.should eq 1
-        json.b.should eq "Haha"
+    #     json = JsonWithDefaults.from_json(%({"a":1}))
+    #     json.a.should eq 1
+    #     json.b.should eq "Haha"
 
-        json = JsonWithDefaults.from_json(%({"b":"bla"}))
-        json.a.should eq 11
-        json.b.should eq "bla"
+    #     json = JsonWithDefaults.from_json(%({"b":"bla"}))
+    #     json.a.should eq 11
+    #     json.b.should eq "bla"
 
-        json = JsonWithDefaults.from_json(%({}))
-        json.a.should eq 11
-        json.b.should eq "Haha"
+    #     json = JsonWithDefaults.from_json(%({}))
+    #     json.a.should eq 11
+    #     json.b.should eq "Haha"
 
-        json = JsonWithDefaults.from_json(%({"a":null,"b":null}))
-        json.a.should eq 11
-        json.b.should eq "Haha"
-      end
+    #     json = JsonWithDefaults.from_json(%({"a":null,"b":null}))
+    #     json.a.should eq 11
+    #     json.b.should eq "Haha"
+    #   end
 
-      it "mixed (JSON::Any)" do
-        j = JSON.parse(%({"a":1,"b":"bla"}))
-        json = JsonWithDefaults.from_json(j)
-        json.a.should eq 1
-        json.b.should eq "bla"
+    #   it "mixed (JSON::Any)" do
+    #     j = JSON.parse(%({"a":1,"b":"bla"}))
+    #     json = JsonWithDefaults.from_json(j)
+    #     json.a.should eq 1
+    #     json.b.should eq "bla"
 
-        j = JSON.parse(%({"a":1}))
-        json = JsonWithDefaults.from_json(j)
-        json.a.should eq 1
-        json.b.should eq "Haha"
+    #     j = JSON.parse(%({"a":1}))
+    #     json = JsonWithDefaults.from_json(j)
+    #     json.a.should eq 1
+    #     json.b.should eq "Haha"
 
-        j = JSON.parse(%({"b":"bla"}))
-        json = JsonWithDefaults.from_json(j)
-        json.a.should eq 11
-        json.b.should eq "bla"
+    #     j = JSON.parse(%({"b":"bla"}))
+    #     json = JsonWithDefaults.from_json(j)
+    #     json.a.should eq 11
+    #     json.b.should eq "bla"
 
-        j = JSON.parse(%({}))
-        json = JsonWithDefaults.from_json(j)
-        json.a.should eq 11
-        json.b.should eq "Haha"
+    #     j = JSON.parse(%({}))
+    #     json = JsonWithDefaults.from_json(j)
+    #     json.a.should eq 11
+    #     json.b.should eq "Haha"
 
-        j = JSON.parse(%({"a":null,"b":null}))
-        json = JsonWithDefaults.from_json(j)
-        json.a.should eq 11
-        json.b.should eq "Haha"
-      end
+    #     j = JSON.parse(%({"a":null,"b":null}))
+    #     json = JsonWithDefaults.from_json(j)
+    #     json.a.should eq 11
+    #     json.b.should eq "Haha"
+    #   end
 
-      it "bool" do
-        json = JsonWithDefaults.from_json(%({}))
-        json.c.should eq true
-        typeof(json.c).should eq Bool
-        json.d.should eq false
-        typeof(json.d).should eq Bool
+    #   it "bool" do
+    #     json = JsonWithDefaults.from_json(%({}))
+    #     json.c.should eq true
+    #     typeof(json.c).should eq Bool
+    #     json.d.should eq false
+    #     typeof(json.d).should eq Bool
 
-        json = JsonWithDefaults.from_json(%({"c":false}))
-        json.c.should eq false
-        json = JsonWithDefaults.from_json(%({"c":true}))
-        json.c.should eq true
+    #     json = JsonWithDefaults.from_json(%({"c":false}))
+    #     json.c.should eq false
+    #     json = JsonWithDefaults.from_json(%({"c":true}))
+    #     json.c.should eq true
 
-        json = JsonWithDefaults.from_json(%({"d":false}))
-        json.d.should eq false
-        json = JsonWithDefaults.from_json(%({"d":true}))
-        json.d.should eq true
-      end
+    #     json = JsonWithDefaults.from_json(%({"d":false}))
+    #     json.d.should eq false
+    #     json = JsonWithDefaults.from_json(%({"d":true}))
+    #     json.d.should eq true
+    #   end
 
-      it "bool (JSON::Any)" do
-        j = JSON.parse(%({}))
-        json = JsonWithDefaults.from_json(j)
-        json.c.should eq true
-        typeof(json.c).should eq Bool
-        json.d.should eq false
-        typeof(json.d).should eq Bool
+    #   it "bool (JSON::Any)" do
+    #     j = JSON.parse(%({}))
+    #     json = JsonWithDefaults.from_json(j)
+    #     json.c.should eq true
+    #     typeof(json.c).should eq Bool
+    #     json.d.should eq false
+    #     typeof(json.d).should eq Bool
 
-        # j = JSON.parse(%({"c":false}))
-        # json = JsonWithDefaults.from_json(j)
-        # json.c.should eq false
-        # j = JSON.parse(%({"c":true}))
-        # json = JsonWithDefaults.from_json(j)
-        # json.c.should eq true
+    #     # j = JSON.parse(%({"c":false}))
+    #     # json = JsonWithDefaults.from_json(j)
+    #     # json.c.should eq false
+    #     # j = JSON.parse(%({"c":true}))
+    #     # json = JsonWithDefaults.from_json(j)
+    #     # json.c.should eq true
 
-        # j = JSON.parse(%({"d":false}))
-        # json = JsonWithDefaults.from_json(j)
-        # json.d.should eq false
-        # j = JSON.parse(%({"d":true}))
-        # json = JsonWithDefaults.from_json(j)
-        # json.d.should eq true
-      end
+    #     # j = JSON.parse(%({"d":false}))
+    #     # json = JsonWithDefaults.from_json(j)
+    #     # json.d.should eq false
+    #     # j = JSON.parse(%({"d":true}))
+    #     # json = JsonWithDefaults.from_json(j)
+    #     # json.d.should eq true
+    #   end
 
-      it "with nilable" do
-        json = JsonWithDefaults.from_json(%({}))
+    #   it "with nilable" do
+    #     json = JsonWithDefaults.from_json(%({}))
 
-        json.e.should eq false
-        typeof(json.e).should eq(Bool | Nil)
+    #     json.e.should eq false
+    #     typeof(json.e).should eq(Bool | Nil)
 
-        json.f.should eq 1
-        typeof(json.f).should eq(Int32 | Nil)
+    #     json.f.should eq 1
+    #     typeof(json.f).should eq(Int32 | Nil)
 
-        json.g.should eq nil
-        typeof(json.g).should eq(Int32 | Nil)
+    #     json.g.should eq nil
+    #     typeof(json.g).should eq(Int32 | Nil)
 
-        json = JsonWithDefaults.from_json(%({"e":false}))
-        json.e.should eq false
-        json = JsonWithDefaults.from_json(%({"e":true}))
-        json.e.should eq true
-      end
+    #     json = JsonWithDefaults.from_json(%({"e":false}))
+    #     json.e.should eq false
+    #     json = JsonWithDefaults.from_json(%({"e":true}))
+    #     json.e.should eq true
+    #   end
 
-      it "create new array every time" do
-        json = JsonWithDefaults.from_json(%({}))
-        json.h.should eq [1, 2, 3]
-        json.h << 4
-        json.h.should eq [1, 2, 3, 4]
+    #   it "create new array every time" do
+    #     json = JsonWithDefaults.from_json(%({}))
+    #     json.h.should eq [1, 2, 3]
+    #     json.h << 4
+    #     json.h.should eq [1, 2, 3, 4]
 
-        json = JsonWithDefaults.from_json(%({}))
-        json.h.should eq [1, 2, 3]
-      end
-    end
+    #     json = JsonWithDefaults.from_json(%({}))
+    #     json.h.should eq [1, 2, 3]
+    #   end
+    # end
 
   #   it "uses Time::EpochConverter" do
   #     string = %({"value":1459859781})

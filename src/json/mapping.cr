@@ -81,83 +81,74 @@ module JSON
         %found{key.id} = false
       {% end %}
 
-      %any.as_h.each do |key, val|
-        case key
-        {% for key, value in properties %}
+      %any.as_h?.try do |h|
+        h.each do |key, value|
+          case key
+          {% for key, value in properties %}
+          # {{value}}
           when {{value[:key] || key.id.stringify}}
-              %var{key.id} = begin
-                {% if value[:converter] %}
-                  {{value[:converter]}}.from_json(val)
-                {% end %}
-              end
-
-        {% end %}
-        else
-        {% if strict %}
-          raise JSON::ParseException.new("unknown json attribute: #{key}", 0, 0)
-        {% else %}
-          # nothing
-        {% end %}
+            # {{value[:type]}}
+            %found{key.id} = true
+            %var{key.id} = value
+          {% end %}
+          else
+            raise JSON::ParseException.new("unknown json attribute: #{key}", 0, 0)
+          end
         end
+
       end
 
       {% for key, value in properties %}
         {% unless value[:nilable] || value[:default] != nil %}
           if %var{key.id}.is_a?(Nil) && !%found{key.id} && !Union({{value[:type]}}).nilable?
-            #raise JSON::ParseException.new("missing json attribute: {{(value[:key] || key).id}}", 0, 0)
+            raise JSON::ParseException.new("missing json attribute: {{(value[:key] || key).id}}", 0, 0)
           end
         {% end %}
       {% end %}
 
       {% for key, value in properties %}
-        "{{ key.id }}"
-        "{{ value[:type] }}"
-        "{{ value[:nilable] }}"
+        {% unless value[:nilable] || value[:default] != nil %}
+          if %var{key.id}.is_a?(Nil) && !%found{key.id} && !Union({{value[:type]}}).nilable?
+            raise JSON::ParseException.new("missing json attribute: {{(value[:key] || key).id}}", 0, 0)
+          end
+        {% end %}
+      {% end %}
 
+      {% for key, value in properties %}
         {% if value[:nilable] %}
           {% if value[:default] != nil %}
-            @{{key.id}} =  if %found{key.id}
-              %any["{{key.id}}"]?.try do |v|
-                {% if value[:type].stringify == "Int32" %}
-                  @{{key.id}} = v.as_i64?.try &.to_i32
-                {% end %}
-              end
-            else
-              {{value[:default]}}
-            end
+            @{{key.id}} = %found{key.id} ? %var{key.id} : {{value[:default]}}
           {% else %}
-            @{{key.id}} = %var{key.id}
+
+            {% if value[:type].stringify == "String" %}
+              @{{key.id}} = (%var{key.id}).as(String)
+            {% elsif value[:type].stringify == "Int64" %}
+              @{{key.id}} = (%var{key.id}).as(Int64)
+            {% elsif value[:type].stringify == "Int32" %}
+              @{{key.id}} = (%var{key.id}).as(Int64).to_i32
+            {% end %}
+          {% end %}
+
+        {% elsif value[:default] != nil %}
+          {% if value[:type].stringify == "String" %}
+            @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as({{value[:type]}})
+          {% elsif value[:type].stringify == "Int64" %}
+           @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as(Int64)
+          {% elsif value[:type].stringify == "Int32" %}
+           @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as(Int64).to_i32
           {% end %}
 
         {% else %}
-
           {% if value[:type].stringify == "String" %}
-            @{{key.id}} = %any["{{key.id}}"].as_s
-          {% elsif value[:type].stringify == "Int8" %}
-            @{{key.id}} = %any["{{key.id}}"].as_i64.to_i8
-          {% elsif value[:type].stringify == "Int16" %}
-            @{{key.id}} = %any["{{key.id}}"].as_i64.to_i16
-          {% elsif value[:type].stringify == "Int32" %}
-            @{{key.id}} = %any["{{key.id}}"].as_i64.to_i32
-          {% elsif value[:type].stringify == "Bool" %}
-            @{{key.id}} = %any["{{key.id}}"].as_bool
-          {% else %}
-            # io = IO.new
-            #  %any["{{key.id}}"].to_json(io)
-            @{{key.id}} =  {{value[:type]}}.new(%any["{{key.id}}"])
-            # raise JSON::ParseException.new("unknown json type: UNKNOWN", 0, 0)
+            @{{key.id}} = (%var{key.id}).as(String)
+          {% elsif value[:type].stringify == "Int64" %}
+            @{{key.id}} = (%var{key.id}).as(Int64)
           {% end %}
-
         {% end %}
-
       {% end %}
 
-        "hi"
-
-
-      {% debug() %}
+        {% debug() %}
     end
-
 
     def initialize(%pull : JSON::PullParser)
       {% for key, value in properties %}
