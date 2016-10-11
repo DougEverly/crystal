@@ -67,12 +67,12 @@ end
 #   JSON.mapping({name: String, any: JSON::Any})
 # end
 
-# private class JsonWithProblematicKeys
-#   JSON.mapping({
-#     key:  Int32,
-#     pull: Int32,
-#   })
-# end
+private class JsonWithProblematicKeys
+  JSON.mapping({
+    key:  Int32,
+    pull: Int32,
+  })
+end
 
 # private class JsonWithSet
 #   JSON.mapping({set: Set(String)})
@@ -335,22 +335,22 @@ describe "JSON mapping" do
     # #   json.to_json.should eq(%({"name":"Hi","any":[{"x":1},2,"hey",true,false,1.5,null]}))
     # # end
 
-    # it "parses json with problematic keys" do
-    #   json = JsonWithProblematicKeys.from_json(%({"key": 1, "pull": 2}))
-    #   json.key.should eq(1)
-    #   json.pull.should eq(2)
-    # end
+    it "parses json with problematic keys" do
+      json = JsonWithProblematicKeys.from_json(%({"key": 1, "pull": 2}))
+      json.key.should eq(1)
+      json.pull.should eq(2)
+    end
 
-    # it "parses json array as set" do
-    #   json = JsonWithSet.from_json(%({"set": ["a", "a", "b"]}))
-    #   json.set.should eq(Set(String){"a", "b"})
-    # end
+    it "parses json array as set" do
+      json = JsonWithSet.from_json(%({"set": ["a", "a", "b"]}))
+      json.set.should eq(Set(String){"a", "b"})
+    end
 
-    # it "parses json array as set (JSON::Any)" do
-    #   j = JSON.parse(%({"set": ["a", "a", "b"]}))
-    #   json = JsonWithSet.from_json(j)
-    #   json.set.should eq(Set(String){"a", "b"})
-    # end
+    it "parses json array as set (JSON::Any)" do
+      j = JSON.parse(%({"set": ["a", "a", "b"]}))
+      json = JsonWithSet.from_json(j)
+      json.set.should eq(Set(String){"a", "b"})
+    end
 
     # it "allows small types of integer" do
     #   json = JSONWithSmallIntegers.from_json(%({"foo": 23, "bar": 7}))
