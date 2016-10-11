@@ -341,16 +341,16 @@ describe "JSON mapping" do
       json.pull.should eq(2)
     end
 
-    it "parses json array as set" do
-      json = JsonWithSet.from_json(%({"set": ["a", "a", "b"]}))
-      json.set.should eq(Set(String){"a", "b"})
-    end
+    # it "parses json array as set" do
+    #   json = JsonWithSet.from_json(%({"set": ["a", "a", "b"]}))
+    #   json.set.should eq(Set(String){"a", "b"})
+    # end
 
-    it "parses json array as set (JSON::Any)" do
-      j = JSON.parse(%({"set": ["a", "a", "b"]}))
-      json = JsonWithSet.from_json(j)
-      json.set.should eq(Set(String){"a", "b"})
-    end
+    # it "parses json array as set (JSON::Any)" do
+    #   j = JSON.parse(%({"set": ["a", "a", "b"]}))
+    #   json = JsonWithSet.from_json(j)
+    #   json.set.should eq(Set(String){"a", "b"})
+    # end
 
     # it "allows small types of integer" do
     #   json = JSONWithSmallIntegers.from_json(%({"foo": 23, "bar": 7}))

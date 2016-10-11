@@ -141,6 +141,8 @@ module JSON
               @{{key.id}} = (%var{key.id}).as(Int64)
             {% elsif value[:type].stringify == "Int32" %}
               @{{key.id}} = (%var{key.id}).as(Int64).to_i32
+            {% else %}
+              @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as({{value[:type]}})
             {% end %}
             
             end
@@ -156,6 +158,8 @@ module JSON
            @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as(Int64)
           {% elsif value[:type].stringify == "Int32" %}
            @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as(Int64).to_i32
+          {% else %}
+           @{{key.id}} = ({{value[:type]}}).from_json(%var{key.id})
           {% end %}
 
         {% else %}
