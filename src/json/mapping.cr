@@ -128,18 +128,25 @@ module JSON
             if %var{key.id}.nil?
               @{{key.id}} = nil
             else
+
             {% if value[:type].stringify == "String" %}
               @{{key.id}} = (%var{key.id}).as(String)
+            {% elsif value[:type].stringify == "Bool" %}
+              @{{key.id}} = (%var{key.id}).as(Bool)
             {% elsif value[:type].stringify == "Int64" %}
               @{{key.id}} = (%var{key.id}).as(Int64)
             {% elsif value[:type].stringify == "Int32" %}
               @{{key.id}} = (%var{key.id}).as(Int64).to_i32
             {% end %}
+            
             end
           {% end %}
 
         {% elsif value[:default] != nil %}
+
           {% if value[:type].stringify == "String" %}
+            @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as({{value[:type]}})
+          {% elsif value[:type].stringify == "Bool" %}
             @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as({{value[:type]}})
           {% elsif value[:type].stringify == "Int64" %}
            @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : (%var{key.id}).as(Int64)
@@ -148,11 +155,13 @@ module JSON
           {% end %}
 
         {% else %}
+
           {% if value[:type].stringify == "String" %}
             @{{key.id}} = (%var{key.id}).as(String)
           {% elsif value[:type].stringify == "Int64" %}
             @{{key.id}} = (%var{key.id}).as(Int64)
           {% end %}
+
         {% end %}
       {% end %}
 

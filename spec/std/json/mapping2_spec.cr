@@ -27,9 +27,9 @@ private class JSONPersonEmittingNull
   })
 end
 
-# private class JSONWithBool
-#   JSON.mapping value: Bool
-# end
+private class JSONWithBool
+  JSON.mapping value: Bool
+end
 
 # private class JSONWithTime
 #   JSON.mapping({
